@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>David &amp; Laurene — Invitation de mariage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="petals"></canvas>
+
+<div class="modal show" id="reminder">
+  <div class="box rem">
+    <div class="rem-top"><span class="bell">🔔</span><h3>Ne manquez pas l'événement !</h3></div>
+    <div class="rem-body">
+      <p>Recevez un rappel automatiquement pour ne pas oublier la date !</p>
+      <button class="btn-fill" id="allow">Autoriser les rappels</button>
+      <button class="btn-line" id="later">Plus tard</button>
+    </div>
+  </div>
+</div>
+
+<section class="intro">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="rg1" cx="50%" cy="40%" r="75%"><stop offset="0" stop-color="var(--rose-a,#ffffff)"/><stop offset="1" stop-color="var(--rose-b,#a9d6f5)"/></radialGradient><radialGradient id="rg2" cx="50%" cy="60%" r="75%"><stop offset="0" stop-color="var(--rose-c,#e4f3fd)"/><stop offset="1" stop-color="var(--rose-d,#6fb6e6)"/></radialGradient><linearGradient id="lg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="var(--leaf-a,#1c6f86)"/><stop offset="1" stop-color="var(--leaf-b,#3aa6a0)"/></linearGradient><symbol id="rose" viewBox="0 0 100 100"><g stroke="var(--rose-line,#8cc3ea)" stroke-width=".8" stroke-opacity=".75"><ellipse cx="50" cy="27" rx="21" ry="26" transform="rotate(0.0 50 50)" fill="url(#rg1)"/><ellipse cx="50" cy="27" rx="21" ry="26" transform="rotate(60.0 50 50)" fill="url(#rg1)"/><ellipse cx="50" cy="27" rx="21" ry="26" transform="rotate(120.0 50 50)" fill="url(#rg1)"/><ellipse cx="50" cy="27" rx="21" ry="26" transform="rotate(180.0 50 50)" fill="url(#rg1)"/><ellipse cx="50" cy="27" rx="21" ry="26" transform="rotate(240.0 50 50)" fill="url(#rg1)"/><ellipse cx="50" cy="27" rx="21" ry="26" transform="rotate(300.0 50 50)" fill="url(#rg1)"/><ellipse cx="50" cy="35" rx="15" ry="19" transform="rotate(36.0 50 50)" fill="url(#rg2)"/><ellipse cx="50" cy="35" rx="15" ry="19" transform="rotate(108.0 50 50)" fill="url(#rg2)"/><ellipse cx="50" cy="35" rx="15" ry="19" transform="rotate(180.0 50 50)" fill="url(#rg2)"/><ellipse cx="50" cy="35" rx="15" ry="19" transform="rotate(252.0 50 50)" fill="url(#rg2)"/><ellipse cx="50" cy="35" rx="15" ry="19" transform="rotate(324.0 50 50)" fill="url(#rg2)"/><ellipse cx="50" cy="42" rx="10" ry="13" transform="rotate(15.0 50 50)" fill="url(#rg1)"/><ellipse cx="50" cy="42" rx="10" ry="13" transform="rotate(105.0 50 50)" fill="url(#rg1)"/><ellipse cx="50" cy="42" rx="10" ry="13" transform="rotate(195.0 50 50)" fill="url(#rg1)"/><ellipse cx="50" cy="42" rx="10" ry="13" transform="rotate(285.0 50 50)" fill="url(#rg1)"/><ellipse cx="50" cy="46" rx="6" ry="8" transform="rotate(50.0 50 50)" fill="url(#rg2)"/><ellipse cx="50" cy="46" rx="6" ry="8" transform="rotate(170.0 50 50)" fill="url(#rg2)"/><ellipse cx="50" cy="46" rx="6" ry="8" transform="rotate(290.0 50 50)" fill="url(#rg2)"/></g><path d="M50 50 m-3.5 0 a3.5 3.5 0 1 1 3.5 3.5" fill="none" stroke="var(--rose-line,#8cc3ea)" stroke-width="1"/></symbol><symbol id="leaf" viewBox="0 0 80 40"><path d="M2 20 C 18 0, 58 0, 78 20 C 58 40, 18 40, 2 20 Z" fill="url(#lg)"/><path d="M4 20 C 30 18, 52 19, 76 20" stroke="#bfe9e4" stroke-opacity=".7" stroke-width="1" fill="none"/></symbol></defs></svg>
+<svg class="flora fl a" style="left:-24px;top:calc(100svh - 150px)" viewBox="0 0 170 240" aria-hidden="true"><use href="#leaf" x="-10" y="30" width="86" height="43" transform="rotate(-28 33 51)"/><use href="#leaf" x="40" y="150" width="90" height="45" transform="rotate(35 85 172)"/><use href="#leaf" x="-14" y="150" width="74" height="37" transform="rotate(-58 23 168)"/><use href="#rose" x="2" y="52" width="108" height="108"/><use href="#rose" x="-14" y="148" width="72" height="72"/><use href="#rose" x="72" y="14" width="60" height="60"/><use href="#rose" x="78" y="176" width="46" height="46"/></svg><svg class="flora fl a r" style="right:-24px;top:calc(100svh - 150px)" viewBox="0 0 170 240" aria-hidden="true"><use href="#leaf" x="-10" y="30" width="86" height="43" transform="rotate(-28 33 51)"/><use href="#leaf" x="40" y="150" width="90" height="45" transform="rotate(35 85 172)"/><use href="#leaf" x="-14" y="150" width="74" height="37" transform="rotate(-58 23 168)"/><use href="#rose" x="2" y="52" width="108" height="108"/><use href="#rose" x="-14" y="148" width="72" height="72"/><use href="#rose" x="72" y="14" width="60" height="60"/><use href="#rose" x="78" y="176" width="46" height="46"/></svg><svg class="flora fl b m" style="left:-36px;top:calc(100svh + 640px)" viewBox="0 0 170 240" aria-hidden="true"><use href="#leaf" x="-10" y="30" width="86" height="43" transform="rotate(-28 33 51)"/><use href="#leaf" x="40" y="150" width="90" height="45" transform="rotate(35 85 172)"/><use href="#leaf" x="-14" y="150" width="74" height="37" transform="rotate(-58 23 168)"/><use href="#rose" x="2" y="52" width="108" height="108"/><use href="#rose" x="-14" y="148" width="72" height="72"/><use href="#rose" x="72" y="14" width="60" height="60"/><use href="#rose" x="78" y="176" width="46" height="46"/></svg><svg class="flora fl b m r" style="right:-36px;top:calc(100svh + 900px)" viewBox="0 0 170 240" aria-hidden="true"><use href="#leaf" x="-10" y="30" width="86" height="43" transform="rotate(-28 33 51)"/><use href="#leaf" x="40" y="150" width="90" height="45" transform="rotate(35 85 172)"/><use href="#leaf" x="-14" y="150" width="74" height="37" transform="rotate(-58 23 168)"/><use href="#rose" x="2" y="52" width="108" height="108"/><use href="#rose" x="-14" y="148" width="72" height="72"/><use href="#rose" x="72" y="14" width="60" height="60"/><use href="#rose" x="78" y="176" width="46" height="46"/></svg>
+<div class="hero"><img src="photo.jpg" alt="David et Laurene">
+<div class="guest"><div class="av" id="gInit">K</div>
+  <div><b id="gName">Invité</b><small>🍽 TABLE : <span id="gTable">—</span> <i class="tag">♥ COUPLE</i></small></div>
+</div>
+<div class="scroll-hint">⌄</div></div>
+
+<div class="wood">
+  <div class="card">
+    <div class="round"><img src="couple.jpg" alt="David et Laurene"></div>
+    <h1>David et Laurene</h1>
+    <div class="orn"><span></span><em>❦</em><span></span></div>
+    <div class="type" id="typed"></div>
+    <div class="prog">
+      <h2>PROGRAMME<small>de la journée</small></h2>
+      <ul>
+        <li><i>🏛</i><div><time>09h00</time><b>CIVIL</b><small>📍 (à préciser)</small></div></li>
+        <li><i>✝</i><div><time>12h00</time><b>BENEDICTION NUPTIALE</b><small>📍 (à préciser)</small></div></li>
+        <li><i>♫</i><div><time>20h00</time><b>SOIREE DANSANTE</b><small>📍 Salle polyvalente MK</small></div></li>
+      </ul>
+    </div>
+    <div class="dress"><u>Dress Code</u><small>En mode Soirée de Gala</small><div class="silh">🎩 🎭</div></div>
+  </div>
+
+</div>
+</section>
+
+<main>
+    <section class="pg w cdpage">
+        <div class="card3">
+            <div class="cd">
+                <div class="cdi"><svg viewBox="0 0 48 48"><circle class="bg" cx="24" cy="24" r="21" /><circle class="fg" id="r_d" cx="24" cy="24" r="21" /></svg><b id="c_d">00</b><small>JOURS</small></div>
+                <div class="cdi"><svg viewBox="0 0 48 48"><circle class="bg" cx="24" cy="24" r="21" /><circle class="fg" id="r_h" cx="24" cy="24" r="21" /></svg><b id="c_h">00</b><small>HEURES</small></div>
+                <div class="cdi"><svg viewBox="0 0 48 48"><circle class="bg" cx="24" cy="24" r="21" /><circle class="fg" id="r_m" cx="24" cy="24" r="21" /></svg><b id="c_m">00</b><small>MINUTES</small></div>
+                <div class="cdi"><svg viewBox="0 0 48 48"><circle class="bg" cx="24" cy="24" r="21" /><circle class="fg" id="r_s" cx="24" cy="24" r="21" /></svg><b id="c_s">00</b><small>SECONDES</small></div>
+            </div>
+            <div class="dates"><div style="--p:20% 30%"><span>24</span></div><div style="--p:50% 60%"><span>10</span></div><div style="--p:85% 40%"><span>26</span></div></div>
+            <div class="venue">
+                <i class="vtag">🏛 LIEU DE RÉCEPTION</i>
+                <h3>Salle polyvalente MK</h3><p>📍 Limete 5<sup>e</sup> rue Référence, Espace Maman Marthe.</p><p>🕒 19h30</p>
+            </div>
+        </div>
+    </section>
+    <!--
+        <section class="pg gallery">
+            <span class="pill">• GALLERY •</span>
+            <h2>Nos Moments <b>Précieux</b></h2>
+            <p>C'est à tes côtés que je veux construire ma vie</p>
+            <div class="grid" id="grid"></div>
+        </section>
+        -->
+    <section class="pg gallery" id="gallery">
+        <span class="pill">• GALLERY •</span>
+        <h2>Nos Moments <b>Précieux</b></h2>
+        <p>C'est à tes côtés que je veux construire ma vie</p>
+
+        <div id="gStage">
+            <div id="gScene">
+                <div id="gPlane"></div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="pg w rsvp">
+        <button class="cta" id="cta">👥 CONFIRMER MA PRÉSENCE</button>
+        <div class="drinks" id="drinksCard">
+            <div class="ic">🥤</div>
+            <h3>Choix de boisson</h3>
+            <p>Sélectionnez jusqu'à 2 boissons (pour les couples)</p>
+            <small id="count">0/2 boisson sélectionnée</small>
+            <input id="fName" class="inp" placeholder="Votre nom complet *" autocomplete="name">
+            <input id="fPhone" class="inp" placeholder="Téléphone (facultatif)" inputmode="tel">
+            <div class="dgrid" id="dgrid"></div>
+            <p class="err" id="err"></p>
+        </div>
+    </section>
+
+    <section class="pg w qrpg">
+        <div class="qr">
+            <h4>▦ Code d'Invitation</h4>
+            <div class="qrbox" id="qrbox"></div>
+            <div class="qrbtn"><button id="dlQr" title="Télécharger le code">⤓</button></div>
+        </div>
+    </section>
+</main>
+
+    <div class="dock">
+      <button id="bMusic" title="Musique" class="disc">💿</button>
+      <button id="bBell" title="Rappel">🔔</button>
+      <button id="bBook" title="Livre d'or">📖<em id="gbN">0</em></button>
+    </div>
+    <audio id="bgm" src="musique.mp3" loop preload="none"></audio>
+
+    <div class="modal" id="gb">
+      <div class="box gbx"><button class="x" id="closeG">×</button>
+        <h3>📖 Livre d'or</h3><small>Laissez un message au couple</small>
+        <div class="msgs" id="msgs"></div>
+        <input id="gbName" class="inp" placeholder="Votre nom *">
+        <textarea id="gMsg" class="inp" rows="3" maxlength="400" placeholder="Votre message *"></textarea>
+        <button class="btn-fill" id="gSend">Envoyer mon message</button><p class="err" id="gErr"></p>
+      </div>
+    </div>
+
+    <div class="modal" id="thanks">
+      <div class="box ty"><button class="x" id="closeT">×</button>
+        <div class="party">🎉</div><small>PRÉSENCE CONFIRMÉE</small>
+        <h3>Merci !</h3><p>Votre présence est <b>confirmée</b>. Nous avons hâte de vous voir !</p>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+    </body>
+    </html>
