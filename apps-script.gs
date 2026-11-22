@@ -1,4 +1,4 @@
-﻿const CLE_ADMIN = "CHANGEZ-MOI-mot-de-passe-admin";
+﻿const CLE_ADMIN = "admin";
 function onglet(nom,entetes){const ss=SpreadsheetApp.getActiveSpreadsheet();let s=ss.getSheetByName(nom);if(!s){s=ss.insertSheet(nom);s.appendRow(entetes)}return s}
 const confirmations=()=>onglet("Confirmations",["Date","Nom","Téléphone","Table","Boissons"]);
 const livreOr=()=>onglet("Livre d'or",["Date","Nom","Message"]);
