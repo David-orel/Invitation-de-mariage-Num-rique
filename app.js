@@ -1,4 +1,4 @@
-﻿const $=s=>document.querySelector(s);
+const $=s=>document.querySelector(s);
 const DRINKS=["COCA","FANTA","MALTINA","VITALO","SPRITE","ENERGY MALT","XXL","NKOYI","CASTEL","BEAUFORT","TEMBO","AUTRES"];
 const MAX=2;let sel=[];
 
@@ -7,7 +7,7 @@ const p=new URLSearchParams(location.search);
 const guest=p.get("invite")||"",table=p.get("table")||"—";
 let inviteRecord=null;
 function showInvite(i){if(!i||!i.nom)return;inviteRecord=i;const label=(i.civilite?i.civilite+" ":"")+i.nom;$("#gName").textContent=label;$("#gInit").textContent=(i.nom||"I")[0].toUpperCase();$("#fName").value=label;const tag=document.querySelector(".guest .tag");if(tag)tag.textContent="♥ "+(i.civilite||"INVITÉ").toUpperCase()}
-if(guest){const local=JSON.parse(localStorage.getItem("invites")||"[]").find(i=>i.id===guest);if(local)showInvite(local);else{$("#gName").textContent=guest;$("#gInit").textContent=guest[0].toUpperCase();$("#fName").value=guest}}
+if(guest){const local=JSON.parse(localStorage.getItem("invites")||"[]").find(i=>i.id===guest);const fromLink={id:guest,nom:p.get("nom")||"",civilite:p.get("civilite")||""};if(local)showInvite(local);else if(fromLink.nom)showInvite(fromLink);else{$("#gName").textContent=guest;$("#gInit").textContent=guest[0].toUpperCase();$("#fName").value=guest}}
 if(guest&&CONFIG.ENDPOINT)fetch(CONFIG.ENDPOINT+"?action=invite&id="+encodeURIComponent(guest)).then(r=>r.json()).then(showInvite).catch(()=>{});
 $("#gTable").textContent=table;
 
@@ -404,4 +404,5 @@ $("#gSend").onclick=async()=>{const nom=$("#gbName").value.trim(),message=$("#gM
       s.style.setProperty("--z",Math.max(.7,z).toFixed(3))})}
   fit();addEventListener("resize",fit);if(document.fonts)document.fonts.ready.then(fit);
 })();
+
 
