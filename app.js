@@ -133,6 +133,8 @@ $("#grid").innerHTML = photos.map((photo, i) => `
                 img.src = SRC(photoNumber);
                 img.alt = `Souvenir ${photoNumber}`;
                 img.draggable = false;
+                img.loading = "lazy";
+                img.decoding = "async";
 
                 img.onerror = () => {
                     console.error("Photo introuvable :", img.src);
@@ -153,6 +155,24 @@ $("#grid").innerHTML = photos.map((photo, i) => `
         }
 
         function fit() {
+            const mobile = window.matchMedia("(max-width: 700px)").matches;
+            if (mobile) {
+                stage.style.height = "auto";
+                scene.style.width = "100%";
+                scene.style.height = "auto";
+                scene.style.left = "0";
+                scene.style.top = "0";
+                scene.style.transform = "none";
+                plane.style.width = "100%";
+                plane.style.height = "auto";
+                plane.style.left = "0";
+                plane.style.top = "0";
+                plane.style.transform = "none";
+                return;
+            }
+            stage.style.height = "571px";
+            plane.style.width = `${VW}px`;
+            plane.style.height = `${VH}px`;
             const sx = stage.clientWidth / VW;
             const sy = stage.clientHeight / VH;
 
@@ -166,6 +186,83 @@ $("#grid").innerHTML = photos.map((photo, i) => `
 
         fit();
         window.addEventListener("resize", fit);
+
+        // Lightbox accessible : clic, flèches clavier et balayage sur mobile.
+        const photos = [...plane.querySelectorAll(".gtile img")];
+        const lightbox = document.createElement("div");
+        lightbox.className = "gallery-lightbox";
+        lightbox.setAttribute("role", "dialog");
+        lightbox.setAttribute("aria-modal", "true");
+        lightbox.setAttribute("aria-label", "Galerie photo");
+        lightbox.innerHTML = `
+          <header class="gl-header"><div><span class="gl-eyebrow">NOS SOUVENIRS</span><strong>Moments précieux</strong></div>
+            <span class="gl-count"></span><button class="gl-close" type="button" aria-label="Fermer la galerie">×</button></header>
+          <button class="gl-prev" type="button" aria-label="Photo précédente">‹</button>
+          <figure><img alt=""><figcaption></figcaption></figure>
+          <button class="gl-next" type="button" aria-label="Photo suivante">›</button>
+          <div class="gl-hint">Utilisez les flèches ou glissez pour faire défiler</div>`;
+        document.body.appendChild(lightbox);
+        const lightboxStyle = document.createElement("style");
+        lightboxStyle.textContent = `
+          body > .gallery-lightbox{position:fixed!important;inset:0!important;z-index:10000!important;display:none!important;overflow:hidden;padding:0!important;background:radial-gradient(ellipse at 50% 42%,#17334c 0%,#071a2b 55%,#020912 100%);color:#fff;}
+          body > .gallery-lightbox.open{display:grid!important;grid-template-columns:minmax(58px,1fr) minmax(0,min(1100px,78vw)) minmax(58px,1fr);grid-template-rows:82px minmax(0,1fr) 44px;align-items:center;}
+          .gl-header{grid-column:1/-1;grid-row:1;display:flex;align-items:center;gap:20px;padding:0 clamp(18px,4vw,56px);border-bottom:1px solid #ffffff18;background:#06152455;}
+          .gl-header>div{display:grid;gap:2px}.gl-eyebrow{color:#7dd3fc;font:700 9px Poppins,sans-serif;letter-spacing:2px}.gl-header strong{color:#fff;font:600 15px 'Playfair Display',serif}.gl-count{margin-left:auto;color:#c4d8e8;font:600 12px Poppins,sans-serif;letter-spacing:1px;}
+          body > .gallery-lightbox button{position:relative;display:grid!important;place-items:center;width:48px;height:48px;padding:0;border:1px solid #ffffff35;border-radius:50%;background:#ffffff12;color:#fff;font:32px/1 Poppins,sans-serif;cursor:pointer;}
+          body > .gallery-lightbox .gl-close{position:static;grid-column:auto;grid-row:auto;font-size:28px}.gl-prev{grid-column:1;grid-row:2;justify-self:center}.gl-next{grid-column:3;grid-row:2;justify-self:center}
+          body > .gallery-lightbox figure{grid-column:2;grid-row:2;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;width:100%;height:100%;max-width:none;max-height:none;margin:0;overflow:hidden;}
+          body > .gallery-lightbox figure img{display:block;width:auto;height:auto;max-width:100%;max-height:calc(100dvh - 160px);object-fit:contain;border:1px solid #ffffff22;border-radius:12px;background:#061524;box-shadow:0 24px 80px #0009,0 0 30px #7dd3fc18;}
+          body > .gallery-lightbox figcaption{color:#d5e7f4;font:500 12px Poppins,sans-serif}.gl-hint{grid-column:1/-1;grid-row:3;align-self:start;text-align:center;color:#8ca6b9;font:400 10px Poppins,sans-serif;letter-spacing:.4px;}
+          body > .gallery-lightbox button:hover,body > .gallery-lightbox button:focus-visible{background:#0284c7;border-color:#7dd3fc;outline:none;}
+          @media(max-width:700px){body > .gallery-lightbox.open{grid-template-columns:48px minmax(0,1fr) 48px;grid-template-rows:70px minmax(0,1fr) 54px}.gl-header{padding:0 14px;gap:10px}.gl-header strong{font-size:13px}body > .gallery-lightbox button{width:40px;height:40px;font-size:27px}body > .gallery-lightbox figure{grid-column:1/-1;grid-row:2;padding:0 6px}body > .gallery-lightbox figure img{max-width:100%;max-height:calc(100dvh - 160px);border-radius:8px}body > .gallery-lightbox .gl-prev{grid-column:1;grid-row:2;z-index:2;justify-self:center}body > .gallery-lightbox .gl-next{grid-column:3;grid-row:2;z-index:2;justify-self:center}.gl-hint{grid-row:3;padding-top:8px}}
+        `;
+        document.head.appendChild(lightboxStyle);
+        const lightImg = lightbox.querySelector("figure img");
+        const caption = lightbox.querySelector("figcaption");
+        const count = lightbox.querySelector(".gl-count");
+        let activePhoto = 0;
+        const showPhoto = index => {
+            activePhoto = (index + photos.length) % photos.length;
+            const source = photos[activePhoto];
+            lightImg.src = source.currentSrc || source.src;
+            lightImg.alt = source.alt;
+            caption.textContent = source.alt;
+            count.textContent = `${String(activePhoto + 1).padStart(2, "0")} / ${String(photos.length).padStart(2, "0")}`;
+            [activePhoto - 1, activePhoto + 1].forEach(n => {
+                const preload = new Image();
+                preload.src = photos[(n + photos.length) % photos.length].src;
+            });
+        };
+        const closeLightbox = () => {
+            lightbox.classList.remove("open");
+            document.body.classList.remove("gallery-lightbox-open");
+        };
+        plane.addEventListener("click", event => {
+            const tile = event.target.closest(".gtile");
+            if (!tile) return;
+            const index = photos.indexOf(tile.querySelector("img"));
+            if (index < 0) return;
+            showPhoto(index);
+            lightbox.classList.add("open");
+            document.body.classList.add("gallery-lightbox-open");
+            lightbox.querySelector(".gl-close").focus();
+        });
+        lightbox.querySelector(".gl-close").addEventListener("click", closeLightbox);
+        lightbox.querySelector(".gl-prev").addEventListener("click", () => showPhoto(activePhoto - 1));
+        lightbox.querySelector(".gl-next").addEventListener("click", () => showPhoto(activePhoto + 1));
+        lightbox.addEventListener("click", event => { if (event.target === lightbox) closeLightbox(); });
+        document.addEventListener("keydown", event => {
+            if (!lightbox.classList.contains("open")) return;
+            if (event.key === "Escape") closeLightbox();
+            if (event.key === "ArrowLeft") showPhoto(activePhoto - 1);
+            if (event.key === "ArrowRight") showPhoto(activePhoto + 1);
+        });
+        let touchStartX = 0;
+        lightbox.addEventListener("touchstart", event => { touchStartX = event.changedTouches[0].clientX; }, { passive: true });
+        lightbox.addEventListener("touchend", event => {
+            const dx = event.changedTouches[0].clientX - touchStartX;
+            if (Math.abs(dx) > 45) showPhoto(activePhoto + (dx < 0 ? 1 : -1));
+        }, { passive: true });
 
         // Réaction au curseur
         
@@ -222,10 +319,14 @@ $("#grid").innerHTML = photos.map((photo, i) => `
         stage.addEventListener("pointermove", move);
         stage.addEventListener("pointerleave", resetGallery);
 
-        // Animation combinée
+        // Animation combinée, suspendue lorsque la galerie est hors écran ou sur mobile.
         let last = performance.now();
+        let frame = 0;
+        let galleryVisible = false;
+        const canAnimate = window.matchMedia("(min-width: 701px) and (hover: hover) and (pointer: fine)");
 
         function loop(now) {
+            if (!galleryVisible || !canAnimate.matches) { frame = 0; return; }
             const elapsed = now - last;
             last = now;
 
@@ -259,10 +360,25 @@ $("#grid").innerHTML = photos.map((photo, i) => `
                     `translate(${u.toFixed(2)}px, ${v.toFixed(2)}px)`;
             }
 
-            requestAnimationFrame(loop);
+            frame = requestAnimationFrame(loop);
         }
 
-        requestAnimationFrame(loop);
+        const galleryObserver = new IntersectionObserver(entries => {
+            galleryVisible = entries[0].isIntersecting;
+            if (galleryVisible && canAnimate.matches && !frame) {
+                last = performance.now();
+                frame = requestAnimationFrame(loop);
+            }
+            if ((!galleryVisible || !canAnimate.matches) && frame) {
+                cancelAnimationFrame(frame);
+                frame = 0;
+            }
+        }, { threshold: 0.05 });
+        galleryObserver.observe(sec);
+        canAnimate.addEventListener("change", () => {
+            if (canAnimate.matches && galleryVisible && !frame) frame = requestAnimationFrame(loop);
+            else if (!canAnimate.matches && frame) { cancelAnimationFrame(frame); frame = 0; }
+        });
 
 
 
@@ -368,7 +484,7 @@ $("#gSend").onclick=async()=>{const nom=$("#gbName").value.trim(),message=$("#gM
     if(to)jump(nearest(s,y),to,dir)}
   function smooth(to){busy=true;scrollTo({top:to,behavior:"smooth"});setTimeout(()=>busy=false,600)}
   const paged=d=>d>0?scrollY>=last()-2:scrollY>last()+2;
-  const modal=()=>document.querySelector(".modal.show");
+  const modal=()=>document.querySelector(".modal.show, .gallery-lightbox.open");
   addEventListener("wheel",e=>{if(modal()||e.ctrlKey||Math.abs(e.deltaX)>Math.abs(e.deltaY))return;
     const d=Math.sign(e.deltaY);if(!d)return;
     if(busy){e.preventDefault();return}
